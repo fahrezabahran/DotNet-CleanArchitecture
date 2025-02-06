@@ -27,8 +27,7 @@ namespace DotNet_CleanArchitecture.Middleware
             var response = new
             {
                 success = false,
-                errorMessage = "Internal Server Error",
-                data = (object)null
+                errorMessage = "Internal Server Error"
             };
 
             var jsonResponse = JsonConvert.SerializeObject(response);

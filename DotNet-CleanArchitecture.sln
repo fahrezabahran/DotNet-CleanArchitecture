@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductApi", "DotNet-CleanArchitecture\ProductApi.csproj", "{2E34DB6A-9451-47D4-AA05-34D851736ECE}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductApi.Application", "ProductApi.Application\ProductApi.Application.csproj", "{619522A1-3E6B-4B57-86AA-3A8FB9A1DB03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductApi.Infrastructure", "ProductApi.Infrastructure\ProductApi.Infrastructure.csproj", "{AA6721B1-5591-41A7-96F5-4085A4A40615}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductApi.Test", "ProductApi.Test\ProductApi.Test.csproj", "{CEED4EEB-483E-4F1D-B218-CEF592CFF677}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{AA6721B1-5591-41A7-96F5-4085A4A40615}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA6721B1-5591-41A7-96F5-4085A4A40615}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA6721B1-5591-41A7-96F5-4085A4A40615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEED4EEB-483E-4F1D-B218-CEF592CFF677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEED4EEB-483E-4F1D-B218-CEF592CFF677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEED4EEB-483E-4F1D-B218-CEF592CFF677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEED4EEB-483E-4F1D-B218-CEF592CFF677}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

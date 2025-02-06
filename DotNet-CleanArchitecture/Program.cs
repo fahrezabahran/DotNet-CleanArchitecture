@@ -4,7 +4,6 @@ using ProductApi.Infrastructure.Repositories; // Import namespace untuk reposito
 using ProductApi.Domain.Interfaces; // Import namespace untuk antarmuka repositori
 using ProductApi.Application.UseCases;
 using DotNet_CleanArchitecture.Middleware;
-using ProductApi.Application.DTOs;
 using ProductApi.Application; // Import namespace untuk use cases
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,9 +17,13 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>(); // Reposito
 
 
 // Use Case
+builder.Services.AddScoped<CreateProductUseCase>();
+builder.Services.AddScoped<GetProductUseCase>();
 builder.Services.AddScoped<GetAllProductsUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
+builder.Services.AddScoped<DeleteProductUseCase>();
 
+// Auto Mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // Konfigurasi Controller dan Swagger
@@ -35,9 +38,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<RequestResponseLoggingMiddleware>();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
+//app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
+app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<AuthenticationMiddleware>();
+app.UseMiddleware<AuthorizationMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RoutingMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

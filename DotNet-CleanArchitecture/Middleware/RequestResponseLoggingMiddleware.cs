@@ -2,14 +2,9 @@
 
 namespace DotNet_CleanArchitecture.Middleware
 {
-    public class RequestResponseLoggingMiddleware
+    public class RequestResponseLoggingMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-
-        public RequestResponseLoggingMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context)
         {
@@ -18,22 +13,20 @@ namespace DotNet_CleanArchitecture.Middleware
 
             // Capture response body
             var originalBodyStream = context.Response.Body;
-            using (var responseBody = new MemoryStream())
-            {
-                context.Response.Body = responseBody;
+            using var responseBody = new MemoryStream();
+            context.Response.Body = responseBody;
 
-                // Call the next middleware in the pipeline
-                await _next(context);
+            // Call the next middleware in the pipeline
+            await _next(context);
 
-                // Log response
-                await LogResponse(context, responseBody);
+            // Log response
+            await LogResponse(context, responseBody);
 
-                // Copy the contents of the new memory stream (which contains the response) to the original stream
-                await responseBody.CopyToAsync(originalBodyStream);
-            }
+            // Copy the contents of the new memory stream (which contains the response) to the original stream
+            await responseBody.CopyToAsync(originalBodyStream);
         }
 
-        private async Task LogRequest(HttpContext context)
+        private static async Task LogRequest(HttpContext context)
         {
             context.Request.EnableBuffering();
             var request = context.Request;
@@ -55,7 +48,7 @@ namespace DotNet_CleanArchitecture.Middleware
             WriteLogToFile(logFilePath, logMessage.ToString());
         }
 
-        private async Task LogResponse(HttpContext context, MemoryStream responseBody)
+        private static async Task LogResponse(HttpContext context, MemoryStream responseBody)
         {
             responseBody.Seek(0, SeekOrigin.Begin);
             var responseBodyText = await new StreamReader(responseBody).ReadToEndAsync();
@@ -73,15 +66,15 @@ namespace DotNet_CleanArchitecture.Middleware
             WriteLogToFile(logFilePath, logMessage.ToString());
         }
 
-        private string GetLogFilePath(DateTime dateTime)
+        private static string GetLogFilePath(DateTime dateTime)
         {
-            var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+            var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs/RequestResponse");
             Directory.CreateDirectory(logDirectory);
             var logFileName = $"log_{dateTime:yyyy-MM-dd}.txt";
             return Path.Combine(logDirectory, logFileName);
         }
 
-        private void WriteLogToFile(string filePath, string logMessage)
+        private static void WriteLogToFile(string filePath, string logMessage)
         {
             try
             {

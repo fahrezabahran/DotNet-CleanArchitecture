@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Application.DTOs;
+using ProductApi.Domain.Entities;
 using ProductApi.Domain.Interfaces;
 
 namespace ProductApi.Application.UseCases
@@ -17,15 +18,11 @@ namespace ProductApi.Application.UseCases
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<ProductDto>> Execute()
+        public async Task<IEnumerable<Product>?> Execute()
         {
             var products = await _productRepository.GetAllAsync();
-            return products.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Price = p.Price
-            });
+            
+            return products;
         }
     }
 }
