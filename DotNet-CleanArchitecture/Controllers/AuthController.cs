@@ -21,7 +21,7 @@ namespace DotNet_CleanArchitecture.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("login")] // Pastikan menggunakan huruf kecil untuk konsistensi
+        [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UserDto userDto)
         {
             await _loginUseCase.Execute(userDto);
@@ -30,20 +30,22 @@ namespace DotNet_CleanArchitecture.Controllers
             if (userDto.UserName == "test" && userDto.Password == "password") // Ganti dengan logika validasi Anda
             {
                 var token = GenerateJwtToken(userDto.UserName);
-                return Ok(new { Token = token });
+                var refreshToken = GenerateRefreshToken(); // Menghasilkan refresh token
+                return Ok(new { Token = token, RefreshToken = refreshToken });
             }
 
             return Unauthorized();
         }
 
-        [HttpPost("refresh")] // Pastikan menggunakan huruf kecil untuk konsistensi
+        [HttpPost("refresh")]
         public IActionResult Refresh([FromBody] RefreshTokenRequest request)
         {
-            // Validasi token refresh (implementasikan logika Anda)
+            // Validasi refresh token (implementasikan logika Anda)
             if (IsValidRefreshToken(request.RefreshToken)) // Ganti dengan logika validasi Anda
             {
                 var newToken = GenerateJwtToken(request.Username);
-                return Ok(new { Token = newToken });
+                var newRefreshToken = GenerateRefreshToken(); // Menghasilkan refresh token baru
+                return Ok(new { Token = newToken, RefreshToken = newRefreshToken });
             }
 
             return Unauthorized();
@@ -70,9 +72,17 @@ namespace DotNet_CleanArchitecture.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        private string GenerateRefreshToken()
+        {
+            // Logika untuk menghasilkan refresh token
+            // Anda bisa menggunakan GUID atau metode lain untuk menghasilkan token yang unik
+            return Guid.NewGuid().ToString();
+        }
+
         private bool IsValidRefreshToken(string refreshToken)
         {
-            // Implementasikan logika untuk memvalidasi token refresh
+            // Implementasikan logika untuk memvalidasi refresh token
+            // Misalnya, periksa apakah refresh token ada dalam database atau cache
             return true; // Placeholder
         }
 

@@ -8,13 +8,18 @@ using ProductApi.Application.UseCases.ProductUseCase;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ProductApi.Application.UseCases.Login; // Import namespace untuk use cases
+using ProductApi.Application.UseCases.Login;
+using StackExchange.Redis; // Import namespace untuk use cases
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Konfigurasi DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+//builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost")); // Ganti dengan string koneksi Redis Anda
+
 
 // Konfigurasi Dependency Injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>(); // Repositori
