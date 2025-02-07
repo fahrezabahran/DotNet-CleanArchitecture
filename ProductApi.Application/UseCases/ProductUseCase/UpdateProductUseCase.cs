@@ -11,14 +11,14 @@ using ProductApi.Domain.Entities;
 using ProductApi.Domain.Exceptions;
 using ProductApi.Domain.Interfaces;
 
-namespace ProductApi.Application.UseCases
+namespace ProductApi.Application.UseCases.ProductUseCase
 {
     public class UpdateProductUseCase(IProductRepository repository, IMapper mapper)
     {
         private readonly IProductRepository _repository = repository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task Execute(Product productUpdate)
+        public async Task Execute(ProductApi.Domain.Entities.Product productUpdate)
         {
             var product = await _repository.GetByIdAsync(productUpdate.Id) ?? throw new NotFoundException($"Product with ID {productUpdate.Id} not found.");
 

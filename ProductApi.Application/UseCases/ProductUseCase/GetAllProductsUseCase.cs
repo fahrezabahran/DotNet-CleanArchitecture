@@ -7,7 +7,7 @@ using ProductApi.Application.DTOs;
 using ProductApi.Domain.Entities;
 using ProductApi.Domain.Interfaces;
 
-namespace ProductApi.Application.UseCases
+namespace ProductApi.Application.UseCases.ProductUseCase
 {
     public class GetAllProductsUseCase
     {
@@ -21,7 +21,7 @@ namespace ProductApi.Application.UseCases
         public async Task<IEnumerable<Product>?> Execute()
         {
             var products = await _productRepository.GetAllAsync();
-            
+
             return products;
         }
     }

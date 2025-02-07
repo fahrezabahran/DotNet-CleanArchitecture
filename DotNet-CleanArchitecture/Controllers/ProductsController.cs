@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductApi.Application.DTOs;
-using ProductApi.Application.UseCases;
+using ProductApi.Application.UseCases.ProductUseCase;
 using ProductApi.Domain.Entities;
 using ProductApi.Domain.Exceptions;
 
@@ -8,7 +8,7 @@ namespace DotNet_CleanArchitecture.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController(CreateProductUseCase createProductUseCase, GetAllProductsUseCase getAllProductsUseCase, UpdateProductUseCase updateProductUseCase, GetProductUseCase getProductUseCase, DeleteProductUseCase deleteProductUseCase) : ControllerBase
+    public class ProductsController(CreateProductUseCase createProductUseCase, GetAllProductsUseCase getAllProductsUseCase, GetProductUseCase getProductUseCase, UpdateProductUseCase updateProductUseCase, DeleteProductUseCase deleteProductUseCase) : ControllerBase
     {
         private readonly CreateProductUseCase _createProductUseCase = createProductUseCase;
         private readonly GetAllProductsUseCase _getAllProductsUseCase = getAllProductsUseCase;
@@ -25,7 +25,7 @@ namespace DotNet_CleanArchitecture.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<Product>> Get()
         {
             var products = await _getAllProductsUseCase.Execute();
 

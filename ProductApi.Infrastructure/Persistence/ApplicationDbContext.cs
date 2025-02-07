@@ -12,6 +12,7 @@ namespace ProductApi.Infrastructure.Persistence
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,14 @@ namespace ProductApi.Infrastructure.Persistence
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18, 2)"); // Menentukan tipe kolom decimal dengan presisi 18 dan skala 2
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.UserName)
+                .HasMaxLength (100);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .HasMaxLength(500);
         }
     }
 }

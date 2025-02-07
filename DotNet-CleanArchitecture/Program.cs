@@ -2,9 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using ProductApi.Infrastructure.Persistence; // Import namespace untuk ApplicationDbContext
 using ProductApi.Infrastructure.Repositories; // Import namespace untuk repositori
 using ProductApi.Domain.Interfaces; // Import namespace untuk antarmuka repositori
-using ProductApi.Application.UseCases;
 using DotNet_CleanArchitecture.Middleware;
-using ProductApi.Application; // Import namespace untuk use cases
+using ProductApi.Application;
+using ProductApi.Application.UseCases.ProductUseCase;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using ProductApi.Application.UseCases.Login; // Import namespace untuk use cases
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Konfigurasi Dependency Injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>(); // Repositori
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
 // Use Case
@@ -22,6 +27,7 @@ builder.Services.AddScoped<GetProductUseCase>();
 builder.Services.AddScoped<GetAllProductsUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
 builder.Services.AddScoped<DeleteProductUseCase>();
+builder.Services.AddScoped<LoginUseCase>();
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -30,6 +36,27 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure JWT authentication
+var key = builder.Configuration["Jwt:Key"];
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+    };
+});
 
 var app = builder.Build();
 
@@ -40,14 +67,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 //app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-app.UseMiddleware<LoggingMiddleware>();
-app.UseMiddleware<AuthenticationMiddleware>();
-app.UseMiddleware<AuthorizationMiddleware>();
-app.UseMiddleware<ErrorHandlingMiddleware>();
-app.UseMiddleware<RoutingMiddleware>();
+//app.UseMiddleware<LoggingMiddleware>();
+//app.UseMiddleware<AuthenticationMiddleware>();
+//app.UseMiddleware<AuthorizationMiddleware>();
+//app.UseMiddleware<ErrorHandlingMiddleware>();
+//app.UseMiddleware<RoutingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

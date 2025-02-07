@@ -9,7 +9,7 @@ using ProductApi.Application.Models;
 using ProductApi.Domain.Entities;
 using ProductApi.Domain.Interfaces;
 
-namespace ProductApi.Application.UseCases
+namespace ProductApi.Application.UseCases.ProductUseCase
 {
     public class GetProductUseCase(IProductRepository productRepository, IMapper mapper)
     {

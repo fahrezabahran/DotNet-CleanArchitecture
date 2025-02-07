@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ProductApi.Domain.Exceptions;
 using ProductApi.Domain.Interfaces;
 
-namespace ProductApi.Application.UseCases
+namespace ProductApi.Application.UseCases.ProductUseCase
 {
     public class DeleteProductUseCase(IProductRepository productRepository)
     {
