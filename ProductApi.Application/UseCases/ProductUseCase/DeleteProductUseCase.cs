@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Domain.Exceptions;
-using ProductApi.Domain.Interfaces;
+using ProductApi.Application.Interfaces;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
+using ProductApi.Application.Responses;
+using ProductApi.Domain.Entities;
 
 namespace ProductApi.Application.UseCases.ProductUseCase
 {
@@ -12,11 +16,16 @@ namespace ProductApi.Application.UseCases.ProductUseCase
     {
         private readonly IProductRepository _productRepository = productRepository;
 
-        public async Task Execute(int id)
+        public async Task<BaseResponse> Execute(int id)
         {
-            _ = await _productRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Product with ID {id} not found.");
+            var product = await _productRepository.GetByIdAsync(id);
+
+            if (product == null)
+                return new ErrorResponse("Product Not Found !");
 
             await _productRepository.DeleteAsync(id);
+
+            return new SuccessResponse<Product>(product);
         }
     }
 }

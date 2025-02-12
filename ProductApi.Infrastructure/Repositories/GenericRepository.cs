@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductApi.Domain.Interfaces;
+using ProductApi.Application.Interfaces;
 using ProductApi.Infrastructure.Persistence;
 using System.Collections.Generic;
 using System.Linq.Expressions;

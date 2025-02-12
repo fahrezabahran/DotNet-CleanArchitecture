@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductApi.Application.DTOs;
+using ProductApi.Application.Responses;
 using ProductApi.Application.UseCases.ProductUseCase;
 using ProductApi.Domain.Entities;
 using ProductApi.Domain.Exceptions;
 
 namespace DotNet_CleanArchitecture.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController(CreateProductUseCase createProductUseCase, GetAllProductsUseCase getAllProductsUseCase, GetProductUseCase getProductUseCase, UpdateProductUseCase updateProductUseCase, DeleteProductUseCase deleteProductUseCase) : ControllerBase
@@ -20,67 +24,31 @@ namespace DotNet_CleanArchitecture.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] ProductDto productDto)
         {
-            var product = await _createProductUseCase.Execute(productDto);
-            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
+            return Ok(await _createProductUseCase.Execute(productDto));
         }
 
         [HttpGet]
-        public async Task<ActionResult<Product>> Get()
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var products = await _getAllProductsUseCase.Execute();
-
-            if (products == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(products);
+            return Ok(await _getAllProductsUseCase.Execute(cancellationToken));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var product = await _getProductUseCase.Execute(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(product);
+            return Ok(await _getProductUseCase.Execute(id));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] Product product)
         {
-            if (id != product.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                await _updateProductUseCase.Execute(product);
-                return NoContent();
-            } 
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return Ok(await _updateProductUseCase.Execute(id, product));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            try
-            {
-                await _deleteProductUseCase.Execute(id);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return Ok(await _deleteProductUseCase.Execute(id));
         }
     }
 }

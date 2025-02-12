@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace ProductApi.Application.DTOs
 {
-    public class UserDto
+    public class UserCreateDto
     {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-        
         [JsonPropertyName("username")]
-        public required string UserName { get; set; }    
+        public required string UserName { get; set; }
 
+        [JsonPropertyName("password")]
+        public required string Password { get; set; }
     }
 }

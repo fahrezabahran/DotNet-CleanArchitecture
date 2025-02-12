@@ -19,22 +19,14 @@ namespace ProductApi.Infrastructure.Persistence
             base.OnModelCreating(modelBuilder);
 
             // Mengatur panjang maksimum untuk kolom Name
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Name)
-                .HasMaxLength(100); // Ganti 100 dengan panjang maksimum yang diinginkan
+            modelBuilder.Entity<Product>().Property(p => p.Name).HasMaxLength(100); // Ganti 100 dengan panjang maksimum yang diinginkan
 
             // Menentukan tipe kolom untuk Price
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("decimal(18, 2)"); // Menentukan tipe kolom decimal dengan presisi 18 dan skala 2
+            modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18, 2)"); // Menentukan tipe kolom decimal dengan presisi 18 dan skala 2
 
-            modelBuilder.Entity<User>()
-                .Property(u => u.UserName)
-                .HasMaxLength (100);
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.Password)
-                .HasMaxLength(500);
+            modelBuilder.Entity<User>().Property(u => u.UserName).HasMaxLength(100);
+            modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
+            modelBuilder.Entity<User>().Property(u => u.Password).HasMaxLength(500);
         }
     }
 }

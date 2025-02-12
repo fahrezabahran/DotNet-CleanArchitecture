@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ProductApi.Domain.Interfaces
+namespace ProductApi.Application.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

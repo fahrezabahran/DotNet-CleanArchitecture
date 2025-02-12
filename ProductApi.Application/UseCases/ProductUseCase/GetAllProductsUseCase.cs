@@ -5,24 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Application.DTOs;
 using ProductApi.Domain.Entities;
-using ProductApi.Domain.Interfaces;
+using ProductApi.Application.Interfaces;
+using ProductApi.Application.Responses;
 
 namespace ProductApi.Application.UseCases.ProductUseCase
 {
-    public class GetAllProductsUseCase
+    public class GetAllProductsUseCase(IProductRepository productRepository)
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductRepository _productRepository = productRepository;
 
-        public GetAllProductsUseCase(IProductRepository productRepository)
+        public async Task<BaseResponse> Execute(CancellationToken cancellationToken)
         {
-            _productRepository = productRepository;
-        }
+            var products = await _productRepository.GetAllAsync(cancellationToken);
 
-        public async Task<IEnumerable<Product>?> Execute()
-        {
-            var products = await _productRepository.GetAllAsync();
-
-            return products;
+            return new SuccessResponse<IEnumerable<Product>>(products);
         }
     }
 }

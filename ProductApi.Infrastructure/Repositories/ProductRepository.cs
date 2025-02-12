@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProductApi.Domain.Entities;
-using ProductApi.Domain.Interfaces;
+using ProductApi.Application.Interfaces;
 using ProductApi.Infrastructure.Persistence;
 
 namespace ProductApi.Infrastructure.Repositories
@@ -14,9 +14,9 @@ namespace ProductApi.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.ToListAsync(cancellationToken);
         }
 
         public async Task<Product?> GetByIdAsync(int id)

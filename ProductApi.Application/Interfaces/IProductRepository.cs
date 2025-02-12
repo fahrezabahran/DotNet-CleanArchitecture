@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Domain.Entities;
 
-namespace ProductApi.Domain.Interfaces
+namespace ProductApi.Application.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAllAsync();
+        Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellation);
         Task<Product?> GetByIdAsync(int id);
         Task AddAsync(Product product);
         Task UpdateAsync(Product product);

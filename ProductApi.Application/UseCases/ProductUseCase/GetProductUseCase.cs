@@ -7,20 +7,20 @@ using AutoMapper;
 using ProductApi.Application.DTOs;
 using ProductApi.Application.Models;
 using ProductApi.Domain.Entities;
-using ProductApi.Domain.Interfaces;
+using ProductApi.Application.Interfaces;
+using ProductApi.Application.Responses;
 
 namespace ProductApi.Application.UseCases.ProductUseCase
 {
-    public class GetProductUseCase(IProductRepository productRepository, IMapper mapper)
+    public class GetProductUseCase(IProductRepository productRepository)
     {
         private readonly IProductRepository _repository = productRepository;
-        private readonly IMapper _mapper = mapper;
 
-        public async Task<Product?> Execute(int id)
+        public async Task<BaseResponse> Execute(int id)
         {
             var product = await _repository.GetByIdAsync(id);
 
-            return product;
+            return new SuccessResponse<Product?>(product);  
         }
     }
 }

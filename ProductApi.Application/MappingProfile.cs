@@ -15,6 +15,12 @@ namespace ProductApi.Application
         {
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>();
+
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+
+            CreateMap<User, UserCreateDto>();
+            CreateMap<UserCreateDto, User>();
         }
     }
 }

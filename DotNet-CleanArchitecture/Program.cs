@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProductApi.Infrastructure.Persistence; // Import namespace untuk ApplicationDbContext
 using ProductApi.Infrastructure.Repositories; // Import namespace untuk repositori
-using ProductApi.Domain.Interfaces; // Import namespace untuk antarmuka repositori
+using ProductApi.Application.Interfaces; // Import namespace untuk antarmuka repositori
 using DotNet_CleanArchitecture.Middleware;
 using ProductApi.Application;
 using ProductApi.Application.UseCases.ProductUseCase;
@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ProductApi.Application.UseCases.Login;
-using StackExchange.Redis; // Import namespace untuk use cases
+using StackExchange.Redis;
+using ProductApi.Application.UseCases.UserUseCase; // Import namespace untuk use cases
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,10 @@ builder.Services.AddScoped<GetProductUseCase>();
 builder.Services.AddScoped<GetAllProductsUseCase>();
 builder.Services.AddScoped<UpdateProductUseCase>();
 builder.Services.AddScoped<DeleteProductUseCase>();
+
+builder.Services.AddScoped<CreateUserUseCase>();
+builder.Services.AddScoped<GetUsersUseCase>();
+
 builder.Services.AddScoped<LoginUseCase>();
 
 // Auto Mapper
@@ -82,6 +87,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 //app.UseMiddleware<RoutingMiddleware>();
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
