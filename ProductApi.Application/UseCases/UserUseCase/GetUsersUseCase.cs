@@ -20,7 +20,7 @@ namespace ProductApi.Application.UseCases.UserUseCase
         {
             var users = await _userRepository.GetAllAsync();
 
-            if (users.Any()) 
+            if (!users.Any()) 
             {
                 return new SuccessResponse<IEnumerable<UserDto>>([], "No users found, but the operation was successful.");
             }
