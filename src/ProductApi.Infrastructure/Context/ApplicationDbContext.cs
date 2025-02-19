@@ -1,0 +1,119 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ProductApi.Domain.Entities;
+
+namespace ProductApi.Infrastructure.Persistence
+{
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    {
+        public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<UserRole> UserRoles{ get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Mengatur panjang maksimum untuk kolom Name
+            modelBuilder.Entity<Product>().Property(p => p.Name).HasMaxLength(100); // Ganti 100 dengan panjang maksimum yang diinginkan
+
+            // Menentukan tipe kolom untuk Price
+            modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18, 2)"); // Menentukan tipe kolom decimal dengan presisi 18 dan skala 2
+
+            // Konfigurasi UserRole
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.ToTable("UserRole");
+
+                entity.HasKey(e => e.RoleId);
+
+                entity.Property(e => e.RoleId)
+                      .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.RoleName)
+                      .IsRequired()
+                      .HasMaxLength(200);
+
+                entity.Property(e => e.IsActive)
+                      .IsRequired();
+            });
+
+            // Konfigurasi User
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
+
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.UserId)
+                      .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.UserName)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(e => e.Password)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(e => e.UserRole)
+                      .IsRequired();
+
+                entity.Property(e => e.IsLogin)
+                      .IsRequired();
+
+                entity.Property(e => e.FalsePwdCount)
+                      .IsRequired();
+
+                entity.Property(e => e.IsRevoke)
+                      .IsRequired();
+
+                entity.Property(e => e.IsActive)
+                      .IsRequired();
+
+                // Relasi dengan UserRole
+                //entity.HasOne(d => d.UserRoleNavigation)
+                //      .WithMany(p => p.Users)
+                //      .HasForeignKey(d => d.UserRole);
+                //      .OnDelete(DeleteBehavior.ClientSetNull)
+                //      .HasConstraintName("FK_User_UserRole");
+            });
+
+            // Konfigurasi UserActivityMonitor
+            modelBuilder.Entity<UserActivity>(entity =>
+            {
+                entity.ToTable("UserActivity");
+
+                entity.HasKey(e => e.ActivityId);
+
+                entity.Property(e => e.ActivityId)
+                      .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.UserId)
+                      .IsRequired();
+
+                entity.Property(e => e.Login)
+                      .IsRequired();
+
+                entity.Property(e => e.Logout)
+                      .IsRequired();
+
+                entity.Property(e => e.ChangePassword)
+                      .IsRequired();
+
+                // Relasi dengan User
+                //entity.HasOne(d => d.User)
+                //      .WithMany(p => p.UserActivities)
+                //      .HasForeignKey(d => d.UserId)
+                //      .OnDelete(DeleteBehavior.ClientSetNull)
+                //      .HasConstraintName("FK_UserActivities_User");
+            });
+        }
+    }
+}
