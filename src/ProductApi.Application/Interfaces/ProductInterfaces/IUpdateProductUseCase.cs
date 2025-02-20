@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ProductApi.Application.Responses;
 using ProductApi.Domain.Entities;
 
-namespace ProductApi.Application.Interfaces
+namespace ProductApi.Application.Interfaces.ProductInterfaces
 {
     public interface IUpdateProductUseCase
     {

@@ -16,9 +16,9 @@ namespace DotNet_CleanArchitecture.Controllers
         private readonly LoginUseCase _loginUseCase = loginUseCase;
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UserCreateDto userCreateDto)
+        public async Task<ActionResult> Login([FromBody] UserCreateDto userCreateDto, CancellationToken cancellationToken)
         {
-            return Ok(await _loginUseCase.Execute(userCreateDto));
+            return Ok(await _loginUseCase.Execute(userCreateDto, cancellationToken));
         }
 
         //[HttpPost("refresh")]

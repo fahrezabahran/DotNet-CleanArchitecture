@@ -11,6 +11,7 @@ namespace ProductApi.Infrastructure.Persistence
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
+        public DbSet<TimeSheet> TimeSheets { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
@@ -106,13 +107,52 @@ namespace ProductApi.Infrastructure.Persistence
 
                 entity.Property(e => e.ChangePassword)
                       .IsRequired();
+            });
 
-                // Relasi dengan User
-                //entity.HasOne(d => d.User)
-                //      .WithMany(p => p.UserActivities)
-                //      .HasForeignKey(d => d.UserId)
-                //      .OnDelete(DeleteBehavior.ClientSetNull)
-                //      .HasConstraintName("FK_UserActivities_User");
+            modelBuilder.Entity<TimeSheet>(entity =>
+            {
+                // Primary Key
+                entity.HasKey(e => e.Id);
+
+                // UserId sebagai Foreign Key (Jika ada relasi dengan tabel User)
+                entity.Property(e => e.UserId)
+                      .IsRequired();
+
+                // DateOnly (disimpan sebagai Date di DB)
+                entity.Property(e => e.CheckInDate)
+                      .HasColumnType("date")
+                      .IsRequired();
+
+                // TimeSpan (disimpan sebagai Time di DB)
+                entity.Property(e => e.CheckInTime)
+                      .HasColumnType("time")
+                      .IsRequired();
+
+                entity.Property(e => e.CheckOutTime)
+                      .HasColumnType("time")
+                      .IsRequired();
+
+                entity.Property(e => e.TotalTime)
+                      .HasColumnType("time")
+                      .HasComputedColumnSql("DATEDIFF(SECOND, CheckInTime, CheckOutTime)");
+
+                entity.Property(e => e.OverTime)
+                      .HasColumnType("time")
+                      .HasComputedColumnSql("CASE WHEN DATEDIFF(HOUR, CheckInTime, CheckOutTime) > 9 THEN DATEADD(SECOND, DATEDIFF(SECOND, DATEADD(HOUR, 9, CheckInTime), CheckOutTime), '00:00:00') ELSE '00:00:00' END");
+
+                // Optional fields
+                entity.Property(e => e.JobDetails)
+                      .HasMaxLength(500);
+
+                entity.Property(e => e.Remarks)
+                      .HasMaxLength(500);
+
+                // Timestamps
+                entity.Property(e => e.CreatedAt)
+                      .HasDefaultValueSql("GETDATE()");
+
+                entity.Property(e => e.UpdatedAt)
+                      .ValueGeneratedOnUpdate();
             });
         }
     }

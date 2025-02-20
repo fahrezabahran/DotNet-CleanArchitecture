@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Application.DTOs;
 using ProductApi.Domain.Entities;
-using ProductApi.Application.Interfaces;
 using ProductApi.Application.Responses;
+using ProductApi.Application.Interfaces.ProductInterfaces;
 
 namespace ProductApi.Application.UseCases.ProductUseCase
 {

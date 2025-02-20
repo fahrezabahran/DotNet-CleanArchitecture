@@ -1,6 +1,7 @@
 ﻿using DotNet_CleanArchitecture.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
-using ProductApi.Application.Interfaces;
+using ProductApi.Application.Interfaces.ProductInterfaces;
 using ProductApi.Application.Responses;
 using ProductApi.Domain.Entities;
 
@@ -28,27 +29,44 @@ public class ProductControllerTest
     }
 
     [Test]
-    public async Task Execute_WithValidId_ReturnsSuccessResponse()
+    public async Task GetProduct_WithValidId_ReturnsSuccessResponse()
     {
         // Arrange
-        int productId = 1;
+        int productId = 2;
         var expectedProduct = new SuccessResponse<Product>(new Product
         {
             Id = productId,
-            Name = "Laptop",
-            Price = 15000
-        }, "Product found");
+            Name = "Fahreza Bahran",
+            Price = 13400000.00M
+        }, "Successfull");
 
-        // Setup mock agar ketika Execute(productId) dipanggil, ia mengembalikan expectedProduct
+        // Setup mock untuk mengembalikan expectedProduct saat metode Execute dipanggil
         _mockGetProductUseCase.Setup(useCase => useCase.Execute(productId))
                               .ReturnsAsync(expectedProduct);
 
         // Act
-        var result = await _mockGetProductUseCase.Object.Execute(productId);
+        var result = await _controller.Get(productId) as OkObjectResult;
 
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.IsTrue(result.Success);
-        Assert.AreEqual("Product found", result.Message);
+        SuccessResponse<Product> response = result.Value as SuccessResponse<Product>;
+
+        if (result != null && response != null)
+        {
+
+            Console.WriteLine("response: " + response.Success);
+            Console.WriteLine("response: " + response.Message);
+            Console.WriteLine("response: " + response.Data.Id);
+            Console.WriteLine("response: " + response.Data.Name);
+            Console.WriteLine("response: " + response.Data.Price);
+
+            // Assert
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.Success, Is.True);
+            Assert.AreEqual("Successfull", response.Message);
+            Assert.IsNotNull(response.Data);
+            Assert.AreEqual(2, response.Data.Id);
+            Assert.AreEqual("Fahreza Bahran", response.Data.Name);
+            Assert.AreEqual(13400000.00M, response.Data.Price);
+        }
     }
 }

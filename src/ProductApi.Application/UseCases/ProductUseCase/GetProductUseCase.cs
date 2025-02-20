@@ -7,8 +7,8 @@ using AutoMapper;
 using ProductApi.Application.DTOs;
 using ProductApi.Application.Models;
 using ProductApi.Domain.Entities;
-using ProductApi.Application.Interfaces;
 using ProductApi.Application.Responses;
+using ProductApi.Application.Interfaces.ProductInterfaces;
 
 namespace ProductApi.Application.UseCases.ProductUseCase
 {

@@ -14,14 +14,14 @@ namespace ProductApi.Application.UseCases.UserUseCase
     {
         private readonly IGenericRepository<User> _userRepository = userRepository;
 
-        public async Task<BaseResponse> Execute(int id)
+        public async Task<BaseResponse> Execute(int id, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(id, cancellationToken);
 
             if (user == null)
                 return new ErrorResponse("User Not Found");
 
-            await _userRepository.DeleteAsync(user.UserId);
+            await _userRepository.DeleteAsync(user.UserId, cancellationToken);
 
             return new SuccessResponse<object>(new { });
         }

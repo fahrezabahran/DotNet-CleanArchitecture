@@ -18,33 +18,33 @@ namespace DotNet_CleanArchitecture.Controllers
         private readonly DeleteUserUseCase _deleteUserUseCase = deleteUserUseCase;
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserCreateDto userDto)
+        public async Task<IActionResult> Create(UserCreateDto userDto, CancellationToken cancellationToken)
         {
-            return Ok(await _createUserUseCase.Execute(userDto));
+            return Ok(await _createUserUseCase.Execute(userDto, cancellationToken));
         }
 
         [HttpGet]
-        public async Task<IActionResult> ReadAll()
+        public async Task<IActionResult> ReadAll(CancellationToken cancellationToken)
         {
-            return Ok(await _getUsersUseCase.Execute());
+            return Ok(await _getUsersUseCase.Execute(cancellationToken));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Read(int id)
+        public async Task<IActionResult> Read(int id, CancellationToken cancellationToken)
         {
-            return Ok(await _getUserUseCase.Execute(id));
+            return Ok(await _getUserUseCase.Execute(id, cancellationToken));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UserUpdateDto userUpdateDto)
+        public async Task<IActionResult> Update(int id, UserUpdateDto userUpdateDto, CancellationToken cancellationToken)
         {
-            return Ok(await _updateUserUseCase.Execute(id, userUpdateDto));
+            return Ok(await _updateUserUseCase.Execute(id, userUpdateDto, cancellationToken));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
-            return Ok(await _deleteUserUseCase.Execute(id));
+            return Ok(await _deleteUserUseCase.Execute(id, cancellationToken));
         }
 
     }

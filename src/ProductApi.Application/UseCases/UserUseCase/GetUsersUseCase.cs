@@ -16,9 +16,9 @@ namespace ProductApi.Application.UseCases.UserUseCase
         private readonly IGenericRepository<User> _userRepository = userRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<BaseResponse> Execute()
+        public async Task<BaseResponse> Execute(CancellationToken cancellationToken)
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsync(cancellationToken);
 
             if (!users.Any()) 
             {

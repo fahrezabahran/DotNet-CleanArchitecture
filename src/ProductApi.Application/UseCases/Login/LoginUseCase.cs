@@ -21,9 +21,9 @@ namespace ProductApi.Application.UseCases.Login
         private readonly IGenericRepository<User> _userRepository = userRepository;
         private readonly IGenericRepository<UserActivity> _userActivityRepository = userActivityRepository;
         private readonly IConfiguration _configuration = configuration;
-        public async Task<BaseResponse> Execute(UserCreateDto userCreateDto)
+        public async Task<BaseResponse> Execute(UserCreateDto userCreateDto, CancellationToken cancellationToken)
         {
-            var users = await _userRepository.FindAsync(u => u.UserName.Contains(userCreateDto.UserName));
+            var users = await _userRepository.FindAsync(u => u.UserName.Contains(userCreateDto.UserName), cancellationToken);
 
             var user = users.SingleOrDefault();
 
@@ -34,12 +34,12 @@ namespace ProductApi.Application.UseCases.Login
             {
 
                 var userActivity = new UserActivity() { UserId = user.UserId, Login = true };
-                await _userActivityRepository.AddAsync(userActivity);
+                await _userActivityRepository.AddAsync(userActivity, cancellationToken);
 
                 if (!BCrypt.Net.BCrypt.Verify(userCreateDto.Password, user.Password))
                 {
                     user.FalsePwdCount += 1;
-                    await _userRepository.UpdateAsync(user);
+                    await _userRepository.UpdateAsync(user, cancellationToken);
                     return new ErrorResponse("Wrong Password");
                 }
 

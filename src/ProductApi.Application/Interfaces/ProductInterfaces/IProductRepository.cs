@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Domain.Entities;
 
-namespace ProductApi.Application.Interfaces
+namespace ProductApi.Application.Interfaces.ProductInterfaces
 {
     public interface IProductRepository
     {

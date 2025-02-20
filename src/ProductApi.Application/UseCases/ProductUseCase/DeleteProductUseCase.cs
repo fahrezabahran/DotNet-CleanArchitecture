@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Domain.Exceptions;
-using ProductApi.Application.Interfaces;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 using ProductApi.Application.Responses;
 using ProductApi.Domain.Entities;
+using ProductApi.Application.Interfaces.ProductInterfaces;
 
 namespace ProductApi.Application.UseCases.ProductUseCase
 {

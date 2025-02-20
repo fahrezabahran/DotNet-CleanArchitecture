@@ -17,7 +17,5 @@ namespace ProductApi.Domain.Entities
         public int FalsePwdCount { get; set; }
         public bool IsRevoke { get; set; }
         public bool IsActive { get; set; }
-        //public UserRole UserRoleNavigation { get; set; }
-        //public ICollection<UserActivity>? UserActivities { get; set; }
     }
 }

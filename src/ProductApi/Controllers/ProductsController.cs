@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductApi.Application.DTOs;
 using ProductApi.Application.Responses;
-using ProductApi.Application.Interfaces;
 using ProductApi.Domain.Entities;
 using ProductApi.Domain.Exceptions;
+using ProductApi.Application.Interfaces.ProductInterfaces;
 
 namespace DotNet_CleanArchitecture.Controllers
 {

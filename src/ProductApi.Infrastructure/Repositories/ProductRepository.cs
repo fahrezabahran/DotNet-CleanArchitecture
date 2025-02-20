@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProductApi.Domain.Entities;
-using ProductApi.Application.Interfaces;
 using ProductApi.Infrastructure.Persistence;
+using ProductApi.Application.Interfaces.ProductInterfaces;
 
 namespace ProductApi.Infrastructure.Repositories
 {

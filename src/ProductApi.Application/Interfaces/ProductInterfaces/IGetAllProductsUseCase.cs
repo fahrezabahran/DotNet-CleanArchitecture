@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Application.Responses;
 
-namespace ProductApi.Application.Interfaces
+namespace ProductApi.Application.Interfaces.ProductInterfaces
 {
     public interface IGetAllProductsUseCase
     {

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ProductApi.Application.Responses;
 
-namespace ProductApi.Application.Interfaces
+namespace ProductApi.Application.Interfaces.ProductInterfaces
 {
-    public interface IDeleteProductUseCase
+    public interface IGetProductUseCase
     {
         Task<BaseResponse> Execute(int id);
     }
