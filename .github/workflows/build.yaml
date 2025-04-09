@@ -2,7 +2,7 @@ name: Build & Publish .NET Project
 
 on:
   push:
-    branches: [ main ]  # Ganti "main" kalau kamu pakai branch lain
+    branches: [ master ]  # Ganti "main" kalau kamu pakai branch lain
 
 jobs:
   build:
