@@ -16,6 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="ExternalServices\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProductApi.Application\ProductApi.Application.csproj" />
   </ItemGroup>
 

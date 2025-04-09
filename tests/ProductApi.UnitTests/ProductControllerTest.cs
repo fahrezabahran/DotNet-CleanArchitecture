@@ -5,7 +5,7 @@ using ProductApi.Application.Interfaces.ProductInterfaces;
 using ProductApi.Application.Responses;
 using ProductApi.Domain.Entities;
 
-namespace ProductApi.Test;
+namespace ProductApi.UnitTests;
 
 public class ProductControllerTest
 {
@@ -44,12 +44,7 @@ public class ProductControllerTest
         _mockGetProductUseCase.Setup(useCase => useCase.Execute(productId))
                               .ReturnsAsync(expectedProduct);
 
-        // Act
-        var result = await _controller.Get(productId) as OkObjectResult;
-
-        SuccessResponse<Product> response = result.Value as SuccessResponse<Product>;
-
-        if (result != null && response != null)
+        if (await _controller.Get(productId) is OkObjectResult result && result.Value is SuccessResponse<Product> response)
         {
 
             Console.WriteLine("response: " + response.Success);
@@ -58,15 +53,18 @@ public class ProductControllerTest
             Console.WriteLine("response: " + response.Data.Name);
             Console.WriteLine("response: " + response.Data.Price);
 
-            // Assert
-            Assert.AreEqual(200, result.StatusCode);
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.Success, Is.True);
-            Assert.AreEqual("Successfull", response.Message);
-            Assert.IsNotNull(response.Data);
-            Assert.AreEqual(2, response.Data.Id);
-            Assert.AreEqual("Fahreza Bahran", response.Data.Name);
-            Assert.AreEqual(13400000.00M, response.Data.Price);
+            Assert.Multiple(() =>
+            {
+                // Assert
+                Assert.That(result.StatusCode, Is.EqualTo(200));
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.Success, Is.True);
+                Assert.That(response.Message, Is.EqualTo("Successfull"));
+                Assert.That(response.Data, Is.Not.Null);
+                Assert.That(response.Data.Id, Is.EqualTo(2));
+                Assert.That(response.Data.Name, Is.EqualTo("Fahreza Bahran"));
+                Assert.That(response.Data.Price, Is.EqualTo(13400000.00M));
+            });
         }
     }
 }

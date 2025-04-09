@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProductApi.Application.DTOs;
+using ProductApi.Application.Dtos;
 using ProductApi.Application.Responses;
 using ProductApi.Domain.Entities;
 

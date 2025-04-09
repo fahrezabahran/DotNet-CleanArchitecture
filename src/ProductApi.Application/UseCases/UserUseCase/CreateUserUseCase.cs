@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using ProductApi.Application.DTOs;
+using ProductApi.Application.Dtos;
 using ProductApi.Application.Interfaces;
 using ProductApi.Application.Responses;
 using ProductApi.Domain.Entities;

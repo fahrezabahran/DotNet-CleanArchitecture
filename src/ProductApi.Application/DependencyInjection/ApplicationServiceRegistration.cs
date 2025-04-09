@@ -1,12 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using ProductApi.Application.Interfaces.ProductInterfaces;
 using ProductApi.Application.Interfaces.Timesheet;
+using ProductApi.Application.Interfaces;
+using ProductApi.Application.Services;
 using ProductApi.Application.UseCases.Login;
 using ProductApi.Application.UseCases.ProductUseCase;
 using ProductApi.Application.UseCases.Timesheet;
 using ProductApi.Application.UseCases.UserUseCase;
 
-namespace ProductApi.Infrastructure.Configurations
+namespace ProductApi.Application.DependencyInjection
 {
     public static class ApplicationServiceRegistration
     {
@@ -28,8 +35,10 @@ namespace ProductApi.Infrastructure.Configurations
 
             services.AddScoped<LoginUseCase>();
 
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ILoginService, LoginService>();
+
             return services;
         }
     }
-
 }

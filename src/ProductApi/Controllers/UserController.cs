@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProductApi.Application.DTOs;
+using ProductApi.Application.Dtos;
 using ProductApi.Application.Responses;
 using ProductApi.Application.UseCases.UserUseCase;
 

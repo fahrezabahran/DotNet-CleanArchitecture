@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using ProductApi.Application.DTOs;
+using ProductApi.Application.Dtos;
 using ProductApi.Application.Models;
 using ProductApi.Domain.Entities;
 using ProductApi.Domain.Exceptions;

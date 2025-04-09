@@ -8,7 +8,7 @@ using ProductApi.Domain.Entities;
 using ProductApi.Infrastructure.Persistence;
 using ProductApi.Application.Interfaces.ProductInterfaces;
 
-namespace ProductApi.Infrastructure.Repositories
+namespace ProductApi.Infrastructure.Persistence.Repositories
 {
     public class ProductRepository(ApplicationDbContext context) : IProductRepository
     {

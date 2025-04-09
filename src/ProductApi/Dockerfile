@@ -4,23 +4,24 @@
 # For more information, please see https://aka.ms/containercompat
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2019 AS base
+USER ContainerUser
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
 
 # This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/ProductApi/ProductApi.csproj", "src/ProductApi/"]
-COPY ["src/ProductApi.Application/ProductApi.Application.csproj", "src/ProductApi.Application/"]
-COPY ["src/ProductApi.Domain/ProductApi.Domain.csproj", "src/ProductApi.Domain/"]
-COPY ["src/ProductApi.Infrastructure/ProductApi.Infrastructure.csproj", "src/ProductApi.Infrastructure/"]
-RUN dotnet restore "./src/ProductApi/ProductApi.csproj"
+COPY ["ProductApi/ProductApi.csproj", "ProductApi/"]
+COPY ["ProductApi.Application/ProductApi.Application.csproj", "ProductApi.Application/"]
+COPY ["ProductApi.Domain/ProductApi.Domain.csproj", "ProductApi.Domain/"]
+COPY ["ProductApi.Infrastructure/ProductApi.Infrastructure.csproj", "ProductApi.Infrastructure/"]
+RUN dotnet restore "./ProductApi/ProductApi.csproj"
 COPY . .
-WORKDIR "/src/src/ProductApi"
+WORKDIR "/src/ProductApi"
 RUN dotnet build "./ProductApi.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

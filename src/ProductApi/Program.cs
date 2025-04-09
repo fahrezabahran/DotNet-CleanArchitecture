@@ -1,20 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using ProductApi.Infrastructure.Persistence; // Import namespace untuk ApplicationDbContext
-using ProductApi.Infrastructure.Repositories; // Import namespace untuk repositori
-using ProductApi.Infrastructure.Configurations; // Import namespace untuk konfigurasi layanan
-using ProductApi.Application.Interfaces; // Import namespace untuk antarmuka repositori
-using DotNet_CleanArchitecture.Middleware;
+using DotNet_CleanArchitecture.Middlewares;
 using ProductApi.Application;
-using ProductApi.Application.UseCases.ProductUseCase;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ProductApi.Infrastructure.DependencyInjection;
+using ProductApi.Application.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureServices(builder.Configuration); // Konfigurasi DbContext
-builder.Services.AddApplicationServices(); // Use Cases
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly); // Auto Mapper
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)   // Default config
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)           // Environment-specific config
+    .AddEnvironmentVariables();                                               // Docker / System Environment
+
+builder.Services
+    .AddInfrastructureServices(builder.Configuration)
+    .AddApplicationServices()
+    .AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // Konfigurasi Controller dan Swagger
 builder.Services.AddControllers();

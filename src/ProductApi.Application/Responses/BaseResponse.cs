@@ -18,7 +18,7 @@ namespace ProductApi.Application.Responses
     public class SuccessResponse<T> : BaseResponse
     {
         [JsonPropertyOrder(3)]
-        public T Data { get; set; }
+        public T? Data { get; set; }
 
         public SuccessResponse(T data, string message)
         {
@@ -32,6 +32,12 @@ namespace ProductApi.Application.Responses
             Success = true;
             Message = "Successfull";
             Data = data;
+        }
+
+        public SuccessResponse(bool success, string message)
+        {
+            Success = success;
+            Message = message;
         }
     }
 

@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace DotNet_CleanArchitecture.Middleware
+namespace DotNet_CleanArchitecture.Middlewares
 {
-    public class RequestResponseLoggingMiddleware(RequestDelegate next)
+    public class LoggingMiddleware(RequestDelegate next)
     {
         private readonly RequestDelegate _next = next;
 

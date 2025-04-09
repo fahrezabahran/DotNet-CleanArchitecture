@@ -1,4 +1,4 @@
-﻿namespace DotNet_CleanArchitecture.Middleware
+﻿namespace DotNet_CleanArchitecture.Middlewares
 {
     public class ErrorHandlingMiddleware(RequestDelegate next)
     {

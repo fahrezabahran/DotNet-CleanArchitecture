@@ -11,6 +11,8 @@ namespace ProductApi.Infrastructure.Persistence
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<TimeSheet> TimeSheets { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
@@ -77,13 +79,6 @@ namespace ProductApi.Infrastructure.Persistence
 
                 entity.Property(e => e.IsActive)
                       .IsRequired();
-
-                // Relasi dengan UserRole
-                //entity.HasOne(d => d.UserRoleNavigation)
-                //      .WithMany(p => p.Users)
-                //      .HasForeignKey(d => d.UserRole);
-                //      .OnDelete(DeleteBehavior.ClientSetNull)
-                //      .HasConstraintName("FK_User_UserRole");
             });
 
             // Konfigurasi UserActivityMonitor
@@ -134,11 +129,18 @@ namespace ProductApi.Infrastructure.Persistence
 
                 entity.Property(e => e.TotalTime)
                       .HasColumnType("time")
-                      .HasComputedColumnSql("DATEDIFF(SECOND, CheckInTime, CheckOutTime)");
+                      .HasComputedColumnSql(@"
+                          CONVERT(TIME, DATEADD(MINUTE, DATEDIFF(MINUTE, CheckInTime, CheckOutTime), '00:00'))
+                      ");
 
                 entity.Property(e => e.OverTime)
                       .HasColumnType("time")
-                      .HasComputedColumnSql("CASE WHEN DATEDIFF(HOUR, CheckInTime, CheckOutTime) > 9 THEN DATEADD(SECOND, DATEDIFF(SECOND, DATEADD(HOUR, 9, CheckInTime), CheckOutTime), '00:00:00') ELSE '00:00:00' END");
+                      .HasComputedColumnSql(@"
+                            CASE 
+                                WHEN DATEDIFF(HOUR, CheckInTime, CheckOutTime) > 9 THEN DATEADD(SECOND, DATEDIFF(SECOND, DATEADD(HOUR, 9, CheckInTime), CheckOutTime), '00:00:00') 
+                                ELSE '00:00:00' 
+                            END
+                      ");
 
                 // Optional fields
                 entity.Property(e => e.JobDetails)
