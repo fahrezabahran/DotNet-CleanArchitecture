@@ -2,7 +2,7 @@ name: Build & Publish .NET Project
 
 on:
   push:
-    branches: [ master ]  # Ganti "main" kalau kamu pakai branch lain
+    branches: [ master ]  # Ganti jika branch kamu beda
 
 jobs:
   build:
@@ -15,19 +15,19 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0'  # Atur sesuai versi .NET yang kamu pakai
+        dotnet-version: '8.0.x'  # Otomatis pakai versi terbaru .NET 8
 
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build project
-      run: dotnet build --configuration Release
+    - name: Build all projects
+      run: dotnet build --configuration Release --no-restore
 
-    - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+    - name: Run unit tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
 
-    - name: Publish project
-      run: dotnet publish -c Release -o ./publish
+    - name: Publish main project
+      run: dotnet publish src/ProductApi/ProductApi.csproj -c Release -o ./publish
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
