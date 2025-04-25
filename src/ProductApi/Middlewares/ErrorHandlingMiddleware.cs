@@ -1,10 +1,14 @@
-﻿namespace DotNet_CleanArchitecture.Middlewares
+﻿using System.Net;
+using Newtonsoft.Json;
+
+namespace DotNet_CleanArchitecture.Middlewares
 {
-    public class ErrorHandlingMiddleware(RequestDelegate next)
+    public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
     {
         private readonly RequestDelegate _next = next;
+        private readonly ILogger<ErrorHandlingMiddleware> _logger = logger;
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
             try
             {
@@ -12,14 +16,21 @@
             }
             catch (Exception ex)
             {
-                // Tangani kesalahan dan log
-                var errorLogFilePath = Path.Combine("Logs", "Error", $"{DateTime.Now:ddMMyyyy_HHmmss}.txt");
-                var errorLogEntry = $"{DateTime.Now:HH:mm:ss} - Error: {ex.Message}\n{ex.StackTrace}\n";
-                await File.AppendAllTextAsync(errorLogFilePath, errorLogEntry);
+                _logger.LogError(ex, "Unhandled exception caught by middleware");
 
-                context.Response.StatusCode = 500; // Internal Server Error
-                await context.Response.WriteAsync($"An error occurred: {ex.Message}");
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/json";
+
+                var response = new
+                {
+                    success = false,
+                    statusCode = 500,
+                    message = "An unexpected error occurred"
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
             }
         }
     }
+
 }

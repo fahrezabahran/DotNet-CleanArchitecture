@@ -10,6 +10,6 @@ namespace ProductApi.Application.Services
 {
     public interface ILoginService
     {
-        Task<BaseResponse> Login(UserCreateDto userCreateDto, CancellationToken cancellationToken);
+        Task<ApiResponse<object>> Login(UserCreateDto userCreateDto, CancellationToken cancellationToken);
     }
 }

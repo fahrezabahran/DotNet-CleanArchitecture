@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ProductApi.Application.Dtos;
 using ProductApi.Application.Interfaces;
 using ProductApi.Application.Responses;

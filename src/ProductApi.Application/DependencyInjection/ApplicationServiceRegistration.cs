@@ -8,7 +8,6 @@ using ProductApi.Application.Interfaces.ProductInterfaces;
 using ProductApi.Application.Interfaces.Timesheet;
 using ProductApi.Application.Interfaces;
 using ProductApi.Application.Services;
-using ProductApi.Application.UseCases.Login;
 using ProductApi.Application.UseCases.ProductUseCase;
 using ProductApi.Application.UseCases.Timesheet;
 using ProductApi.Application.UseCases.UserUseCase;
@@ -33,7 +32,6 @@ namespace ProductApi.Application.DependencyInjection
             services.AddScoped<UpdateUserUseCase>();
             services.AddScoped<DeleteUserUseCase>();
 
-            services.AddScoped<LoginUseCase>();
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ILoginService, LoginService>();

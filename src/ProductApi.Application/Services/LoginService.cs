@@ -20,7 +20,7 @@ namespace ProductApi.Application.Services
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IConfiguration _configuration = configuration;
 
-        public async Task<BaseResponse> Login(UserCreateDto userCreateDto, CancellationToken cancellationToken)
+        public async Task<ApiResponse<object>> Login(UserCreateDto userCreateDto, CancellationToken cancellationToken)
         {
             try
             {
@@ -28,10 +28,10 @@ namespace ProductApi.Application.Services
                 var user = (await _unitOfWork.Users.FindAsync(u => u.UserName.Equals(userCreateDto.UserName), cancellationToken)).SingleOrDefault();
 
                 if (user == null || !user.IsActive)
-                    return new ErrorResponse("User Not Found");
+                    return ApiResponse<object>.FailResponse("login failed", "User Not Found");
 
                 if (user.IsRevoke)
-                    return new ErrorResponse("User Locked");
+                    return ApiResponse<object>.FailResponse("login failed", "User Locked");
 
                 if (!BCrypt.Net.BCrypt.Verify(userCreateDto.Password, user.Password))
                 {
@@ -44,11 +44,11 @@ namespace ProductApi.Application.Services
 
                     _unitOfWork.Users.Update(user);
                     await _unitOfWork.CompleteAsync(cancellationToken);
-                    return new ErrorResponse("Wrong Password");
+                    return ApiResponse<object>.FailResponse("login failed", "Wrong Password");
                 }
 
                 if (user.IsLogin)
-                    return new ErrorResponse("User Current Loggin");
+                    return ApiResponse<object>.FailResponse("login failed", "User Current Loggin");
 
                 // reset count if login success
                 if (user.FalsePwdCount > 0)
@@ -65,7 +65,7 @@ namespace ProductApi.Application.Services
                 var userActivity = new UserActivity() { UserId = user.UserId, Login = true, ActivityDate = DateTime.Now };
                 await _unitOfWork.UserActivities.AddAsync(userActivity, cancellationToken);
                 await _unitOfWork.CompleteAsync(cancellationToken);
-                return new SuccessResponse<object>(new { Token = token, RefreshToken = refreshToken }, "Successfull");
+                return ApiResponse<object>.SuccessResponse(new { Token = token, RefreshToken = refreshToken });
             }
             catch
             {
